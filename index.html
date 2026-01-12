@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a"> 
+    <meta name="description" content="Naxio - A maior plataforma de E-COMMERCE">
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>Naxio Sistema E-COMMERCE PROFISSIONAL</title>
+    
+    <link rel="manifest" id="dynamic-manifest">
+    
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/PazChurchParaipaba/projetoentrega/refs/heads/main/logo.png"> 
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/PazChurchParaipaba/projetoentrega/refs/heads/main/logo.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./css/style.css?v=12">
+
+    <style>
+        /* --- CORREÇÃO DO AVISO (TOAST) --- */
+        .toast-container {
+            position: fixed !important;
+            top: 20px !important; /* Topo */
+            right: 20px !important; /* Direita */
+            z-index: 999999 !important; /* Acima de tudo */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none; /* Permite clicar através */
+        }
+
+        .toast {
+            background: #1e293b !important; /* Fundo Escuro */
+            color: #f1f5f9 !important; /* Texto Claro */
+            padding: 15px 20px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            border: 1px solid #334155 !important;
+            border-left: 5px solid #06b6d4 !important; /* Borda Lateral Azul */
+            min-width: 280px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInToast 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            pointer-events: auto;
+        }
+        
+        .toast.warning { border-left-color: #f59e0b !important; color: #fef3c7 !important; }
+        .toast.error { border-left-color: #ef4444 !important; color: #fee2e2 !important; }
+        .toast.success { border-left-color: #10b981 !important; color: #d1fae5 !important; }
+
+        @keyframes slideInToast {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* --- CORREÇÕES VISUAIS GERAIS --- */
+        .card { height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
+        .card .btn-full { margin-top: auto !important; }
+        .product-gallery-wrapper { height: 250px !important; overflow: hidden !important; width: calc(100% + 2rem) !important; margin: -1rem -1rem 1rem -1rem !important; }
+        .gallery-img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top center !important; }
+        
+        /* Banner PWA */
+        .pwa-banner { 
+            position: fixed !important; top: 15px !important; right: 15px !important; left: auto !important; transform: none !important;
+            width: auto !important; background: #06b6d4 !important; color: #0f172a !important;
+            padding: 8px 16px !important; border-radius: 50px !important; z-index: 10001 !important;
+            display: none; align-items: center; gap: 8px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 0 15px rgba(6,182,212,0.6) !important;
+        }
+        @media (min-width: 769px) { .pwa-banner { display: none !important; } }
+
+        /* Categorias Mobile */
+        .category-scroll { display: flex !important; gap: 10px !important; overflow-x: auto !important; padding: 5px !important; margin-bottom: 15px !important; scrollbar-width: none !important; }
+        .cat-pill { padding: 8px 20px !important; border-radius: 50px !important; white-space: nowrap !important; background: #1e293b !important; border: 1px solid #334155 !important; }
+        .cat-pill.active { background: #06b6d4 !important; color: #0f172a !important; font-weight: 800 !important; }
+
+        /* --- DASHBOARD MÉTRICAS (Visual Premium) --- */
+.metrics-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 15px; 
+    margin-bottom: 2rem; 
+}
+
+@media (max-width: 768px) { 
+    .metrics-grid { grid-template-columns: 1fr; } /* Um embaixo do outro no celular */
+}
+
+.metric-card { 
+    background: #1e3a8a; /* Azul Royal Escuro */
+    padding: 1.5rem; 
+    border-radius: 12px; 
+    text-align: center; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 110px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Borda sutil */
+    transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    background: #172554; /* Levemente mais escuro ao passar o mouse */
+}
+
+.metric-card h5 { 
+    color: #cbd5e1; /* Cinza claro */
+    font-size: 0.75rem; 
+    font-weight: 600;
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    margin-bottom: 8px; 
+    opacity: 0.8;
+}
+
+.metric-card .value { 
+    color: #22d3ee; /* Ciano Neon (brilhante) */
+    font-size: 1.8rem; 
+    font-weight: 800; 
+    line-height: 1.2;
+}
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toast-container"></div>
+    
+    <div id="store-notifications"></div>
+    <div id="cart-floater" class="cart-floater" onclick="App.cart.open()">
+        <div class="cart-icon-box">
+            <i class="ri-shopping-cart-2-line"></i>
+            <span id="cart-count" class="cart-badge">0</span>
+        </div>
+        <span id="cart-total">R$ 0,00</span>
+    </div>
+
+    <div id="pwa-banner" class="pwa-banner" onclick="App.pwa.install()">
+        <i class="ri-download-cloud-2-line"></i>
+        <span>Baixar App</span>
+    </div>
+
+    <header>
+        <div class="brand" onclick="App.router.go('home')">
+            <img src="https://raw.githubusercontent.com/PazChurchParaipaba/projetoentrega/refs/heads/main/logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <span class="brand-text">Naxio</span>
+        </div>
+
+        <nav class="desktop-nav" id="header-nav-area">
+            </nav>
+    </header>
+
+   <main>
+        
+        <section id="view-home" class="view-section active">
+            <div class="container">
+                <div class="hero-section" style="margin-top: 10px; margin-bottom: 20px;">
+                    <h1 style="font-size: 2rem; line-height: 1.1;">Encontre o que você precisa</h1>
+                    <p style="margin-top: 5px;">Programado para o que você precisar.</p>
+                </div>
+
+                <div class="category-scroll" id="category-list">
+                    <button class="cat-pill active" onclick="App.catalog.filter('Todos', this)">Todos</button>
+                </div>
+                
+                <div id="public-catalog" class="grid grid-3">
+                    <div class="card" style="text-align:center; padding:4rem;">
+                        <i class="ri-loader-4-line spin" style="font-size:2.5rem; color:var(--primary)"></i>
+                        <p style="margin-top:1rem;">Carregando ofertas...</p>
+                    </div>
+                </div>
+            </div>
+        </section> <section id="view-auth" class="view-section container">
+            <div class="card auth-card">
+                <div id="auth-state-login">
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="color:var(--primary); margin-bottom:0.5rem;">Bem-vindo</h2>
+                        <p>Entre para gerenciar seus pedidos e serviços</p>
+                    </div>
+                    <div class="input-wrapper"><label>Email</label><input type="email" id="login-email" class="input-field"></div>
+                    <div class="input-wrapper"><label>Senha</label><input type="password" id="login-pass" class="input-field"></div>
+                    <button class="btn btn-primary btn-full" onclick="App.auth.login()">Entrar</button>
+                    <div style="margin-top:1rem;"><button class="btn btn-sm btn-secondary" onclick="App.auth.switchView('recover')">Esqueci a senha</button></div>
+                    <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+                        <p class="text-xs">Não possui conta?</p>
+                        <button class="btn btn-secondary btn-full" onclick="App.auth.switchView('roles')">Criar Conta</button>
+                    </div>
+                </div>
+                <div id="auth-state-roles" style="display:none;">
+                    <h3>Selecione seu Perfil</h3>
+                    <div class="role-grid">
+                        <div class="role-card" onclick="App.auth.startReg('cliente')"><i class="ri-user-smile-line"></i><b>Cliente</b></div>
+                        <div class="role-card" onclick="App.auth.startReg('loja_admin')"><i class="ri-store-2-line"></i><b>Lojista</b></div>
+                        <div class="role-card" onclick="App.auth.startReg('motorista')"><i class="ri-motorbike-line"></i><b>Motorista</b></div>
+                    </div>
+                    <button class="btn btn-secondary btn-full" style="margin-top:1rem" onclick="App.auth.switchView('login')">Voltar</button>
+                </div>
+                <div id="auth-state-register" style="display:none;">
+                    <h3 id="reg-title">Cadastro</h3>
+                    <div class="input-wrapper"><label>Nome</label><input type="text" id="reg-name" class="input-field"></div>
+                    <div class="input-wrapper"><label>Email</label><input type="email" id="reg-email" class="input-field"></div>
+                    <div class="input-wrapper"><label>Senha</label><input type="password" id="reg-pass" class="input-field"></div>
+                    <div id="reg-dynamic-fields"></div>
+                    <button class="btn btn-primary btn-full" onclick="App.auth.register()">Cadastrar</button>
+                    <button class="btn btn-secondary btn-full" style="margin-top:0.5rem" onclick="App.auth.switchView('roles')">Voltar</button>
+                </div>
+                <div id="auth-state-recover" style="display:none;">
+                    <h3>Recuperar Senha</h3>
+                    <div class="input-wrapper"><label>Email</label><input type="email" id="rec-email" class="input-field"></div>
+                    <div class="input-wrapper"><label>CPF</label><input type="text" id="rec-cpf" class="input-field"></div>
+                    <button class="btn btn-primary btn-full" onclick="App.auth.recoverPassword()">Enviar</button>
+                    <button class="btn btn-secondary btn-full" style="margin-top:0.5rem" onclick="App.auth.switchView('login')">Voltar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-loja" class="view-section container">
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; margin-bottom:2rem; padding-bottom:20px; border-bottom:1px solid var(--border);">
+                <div>
+                    <h2>Painel da Loja</h2>
+                    <div id="loja-header-info"><p>Gestão completa</p></div>
+                </div>
+                <div style="flex:1; max-width:600px;">
+                    <div class="auto-print-box" onclick="document.getElementById('toggle-auto-print').click()">
+                        <label style="cursor:pointer; font-weight:bold; font-size:0.85rem; color:var(--text-muted);">Auto-Print</label>
+                        <input type="checkbox" id="toggle-auto-print" onchange="App.store.toggleAutoPrint()">
+                    </div>
+                    <div class="admin-actions-grid">
+                        <button class="btn btn-sm btn-info" onclick="if(typeof Caixa!=='undefined')Caixa.openView()"><i class="ri-safe-2-line"></i><span>Caixa</span></button>
+                        <button class="btn btn-warning btn-sm" onclick="if(typeof Varejo!=='undefined')Varejo.openPDV()"><i class="ri-computer-line"></i><span>PDV</span></button>
+                        <button class="btn btn-secondary btn-sm" onclick="if(typeof Fiscal!=='undefined')Fiscal.openModal()"><i class="ri-government-line"></i><span>Fiscal</span></button>
+                        <button class="btn btn-secondary btn-sm" onclick="App.store.setupPrinter()"><i class="ri-printer-line"></i><span>Print</span></button>
+                        <button class="btn btn-primary btn-sm" onclick="App.store.openProductModal()"><i class="ri-add-line"></i><span>Novo</span></button>
+                        <button class="btn btn-sm" style="background:#475569; color:white;" onclick="App.store.importProducts()"><i class="ri-file-upload-line"></i><span>CSV</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card"><h5>Vendas Hoje</h5><div id="metric-day" class="value">R$ 0,00</div></div>
+                <div class="metric-card"><h5>Semana</h5><div id="metric-week" class="value">R$ 0,00</div></div>
+                <div class="metric-card"><h5>Mês</h5><div id="metric-month" class="value">R$ 0,00</div></div>
+            </div>
+
+            <div class="card" style="margin-bottom:2rem; border:none; background:transparent; padding:0;">
+                <div class="dynamic-list-box">
+                    <div class="dynamic-list-header">
+                        <h4><i class="ri-layout-grid-line"></i> Salão</h4>
+                        <button class="btn btn-sm btn-secondary" onclick="App.store.loadComandas()"><i class="ri-refresh-line"></i></button>
+                    </div>
+                    <div id="admin-comanda-grid" class="tables-grid-wrapper">
+                        <div class="empty-state-box">Carregando mesas...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div>
+                    <div id="admin-restaurant-panel" class="dynamic-list-box" style="margin-bottom:1.5rem; padding:15px; display:none;">
+                        <h5 style="margin-bottom:10px;">Gestão de Salão (Restaurante)</h5>
+                        <div style="display:flex; gap:10px; margin-bottom:15px;">
+                            <input type="number" id="comanda-start" class="input-field" placeholder="Início">
+                            <input type="number" id="comanda-end" class="input-field" placeholder="Fim">
+                            <button class="btn btn-primary btn-sm" onclick="App.admin.createComandas()">Gerar Comandas</button>
+                        </div>
+                        
+                        <hr style="border-color:var(--border); margin:10px 0;">
+                        
+                        <h5 style="margin-bottom:10px;">Cadastrar Equipe</h5>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <input id="staff-name" class="input-field" placeholder="Nome">
+                            <input id="staff-email" type="email" class="input-field" placeholder="Email">
+                            <input id="staff-pass" type="password" class="input-field" placeholder="Senha">
+                            <select id="staff-role" class="input-field"><option value="garcom">Garçom</option><option value="cumim">Cumim</option></select>
+                            <input id="staff-rate" type="number" class="input-field" placeholder="Taxa %" value="10">
+                            <button class="btn btn-success btn-sm" onclick="App.admin.registerStaff()">Salvar</button>
+                        </div>
+
+                        <hr style="border-color:var(--border); margin:10px 0;">
+
+                        <h5 style="margin-bottom:10px;">Histórico de Mesas Fechadas</h5>
+                        <div style="display:flex; gap:10px;">
+                            <input type="date" id="history-date" class="input-field">
+                            <button class="btn btn-secondary btn-sm" onclick="App.store.filterHistory()">Filtrar</button>
+                        </div>
+                        <div id="history-results" style="margin-top:10px;"></div>
+                    </div>
+
+                    <div class="dynamic-list-box" style="padding:15px; border-left: 4px solid var(--success);">
+                        <h5 style="margin-bottom:10px;"><i class="ri-bank-card-line"></i> Recebimento Automático</h5>
+                        <p class="text-xs text-muted">Cole suas chaves de Produção do Mercado Pago.</p>
+                        <div id="store-keys-area">
+                            <input type="text" id="store-public-key" class="input-field" placeholder="Public Key" style="margin-bottom:10px;">
+                            <input type="password" id="store-access-token" class="input-field" placeholder="Access Token" style="margin-bottom:10px;">
+                            <button class="btn btn-success btn-sm btn-full" onclick="App.store.saveCredentials()">Salvar e Ativar</button>
+                        </div>
+                        <div id="store-keys-locked" style="display:none; text-align:center; padding:10px; background:rgba(16, 185, 129, 0.1); border-radius:8px;">
+                            <i class="ri-shield-check-line" style="font-size:1.5rem; color:var(--success);"></i><br>
+                            <strong>Pagamentos Ativos</strong><br>
+                            <button class="btn btn-secondary btn-sm" style="margin-top:10px;" onclick="App.store.resetKeys()">Redefinir</button>
+                        </div>
+
+                        <hr style="border-color:var(--border); margin:20px 0;">
+
+                        <h5 style="margin-bottom:10px;"><i class="ri-truck-line"></i> Configuração de Entrega</h5>
+                        <input type="text" id="store-pickup-address" class="input-field" placeholder="Endereço de Retirada" style="margin-bottom:10px;">
+                        <input type="number" id="store-delivery-fee" class="input-field" placeholder="Taxa Padrão (R$)" style="margin-bottom:10px;">
+                        <button class="btn btn-sm btn-primary btn-full" style="background:#8b5cf6; border:none; color:white;" onclick="App.store.saveLogistics()">Salvar Configuração</button>
+                        
+                        <hr style="border-color:var(--border); margin:20px 0;">
+                        
+                        <h5 style="margin-bottom:10px;"><i class="ri-team-line"></i> Parceiro Exclusivo</h5>
+                        <div style="display:flex; gap:10px;">
+                            <input id="partner-email-input" class="input-field" placeholder="Email do motorista">
+                            <button class="btn btn-info btn-sm" onclick="App.store.linkPartner()">Vincular</button>
+                        </div>
+                        <div id="active-partner-display" style="font-size:0.8rem; font-weight:bold; color:var(--info); margin-top:5px;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="dynamic-list-box" style="margin-bottom:1.5rem; border-left:4px solid var(--primary);">
+                        <div class="dynamic-list-header"><h4 style="color:var(--primary)">Pedidos Abertos</h4></div>
+                        <div id="store-orders-list" class="dynamic-list-content"><div class="empty-state-box">Vazio</div></div>
+                    </div>
+                    
+                    <div class="dynamic-list-box" style="margin-bottom:1.5rem; border-left:4px solid var(--info);">
+                        <div class="dynamic-list-header"><h4 style="color:var(--info-dark)">Conversas</h4></div>
+                        <div id="store-chat-list" class="dynamic-list-content"><div class="empty-state-box">Vazio</div></div>
+                    </div>
+
+                    <div class="dynamic-list-box">
+                        <div class="dynamic-list-header"><h4>Meus Produtos</h4></div>
+                        <div id="store-products-list" class="dynamic-list-content"><div class="empty-state-box">Carregando...</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-cliente" class="view-section container">
+            
+            <div style="display:flex; justify-content:space-between; align-items:end; margin-bottom: 2rem;">
+                <div>
+                    <h2 style="margin-bottom:5px;">Olá, Cliente!</h2>
+                    <p class="text-muted" style="margin:0;">Gerencie seus pedidos e suporte</p>
+                </div>
+                <button class="btn btn-sm btn-secondary" onclick="App.client.init()">
+                    <i class="ri-refresh-line"></i> Atualizar
+                </button>
+            </div>
+
+            <div class="box-mesa-cliente">
+                <h4><i class="ri-restaurant-2-fill"></i> Consumo no Local</h4>
+                <div class="box-mesa-wrapper">
+                    <input type="number" id="client-table-check" placeholder="Digite o número da mesa..." inputmode="numeric">
+                    <button class="btn btn-primary" onclick="App.client.checkTableBill()">
+                        Ver Conta
+                    </button>
+                </div>
+            </div>
+
+            <div class="client-conversas-box">
+                <div class="client-conversas-header">
+                    <i class="ri-message-3-fill" style="color:var(--primary)"></i> Suas Conversas
+                </div>
+                <div id="client-chat-list">
+                    <div style="text-align:center; padding:15px; color:#64748b; font-size:0.9rem;">
+                        Nenhuma conversa recente.
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0; font-size:1.2rem;">Pedidos em Andamento</h3>
+            <div id="client-orders-list" class="grid grid-1">
+                <div class="empty-orders">
+                    <i class="ri-shopping-bag-3-line"></i>
+                    <p>Você não tem pedidos ativos no momento.</p>
+                </div>
+            </div>
+
+            <button class="btn-back-catalog" onclick="App.router.go('home')">
+                <i class="ri-arrow-left-line"></i> Voltar para a Loja
+            </button>
+        </section>
+
+        </main>
+
+    <nav class="bottom-nav" id="mobile-nav"></nav>
+
+    <button class="btn-faq-float" onclick="document.getElementById('faq-modal').style.display='flex'" title="Dúvidas Frequentes">
+        <i class="ri-question-mark"></i>
+    </button>
+
+    <div id="faq-modal" class="modal-overlay" style="z-index: 10005;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="ri-customer-service-2-line"></i> Ajuda</h3>
+                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('faq-modal').style.display='none'">X</button>
+            </div>
+            <div class="modal-body">
+                <div class="faq-item">
+                    <details>
+                        <summary>Quanto tempo demora?</summary>
+                        <p>O tempo médio é de 40 a 60 minutos.</p>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>Aceita Pix?</summary>
+                        <p>Sim! Aceitamos Pix, Cartão e Dinheiro.</p>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>Taxa de Entrega</summary>
+                        <p>Calculada automaticamente pelo seu bairro no checkout.</p>
+                    </details>
+                </div>
+                
+                <div style="margin-top:20px; text-align:center;">
+                    <p class="text-xs text-muted">Ainda com dúvidas?</p>
+                    <a href="https://wa.me/5585999999999" target="_blank" class="btn btn-success btn-full">
+                        Chamar no WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <section id="view-waiter" class="view-section container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                <h2>Garçom</h2>
+                <button class="btn btn-danger btn-sm" onclick="App.auth.logout()">Sair</button>
+            </div>
+            <div id="comanda-list-container" class="comanda-grid"></div>
+        </section>
+
+        <section id="view-provider" class="view-section container">
+            <div class="card" style="margin-bottom:2rem;">
+                <h3>Painel de Serviços</h3>
+                <p>Parceiro Online</p>
+                <button class="btn btn-secondary btn-sm" onclick="App.provider.updatePix()">Atualizar Pix</button>
+            </div>
+            <div id="provider-jobs-list" class="grid grid-2"></div>
+        </section>
+    </main>
+    
+    <div id="printable-area" style="display:none;"></div>
+    <nav class="bottom-nav" id="mobile-nav"></nav>
+
+    <div id="map-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div><h3>Navegação GPS</h3><p id="map-dest-address" class="text-xs text-muted" style="margin:0;"></p></div>
+                <button class="btn btn-secondary btn-sm" onclick="App.map.close()">Fechar</button>
+            </div>
+            <div id="map"></div>
+            <div class="modal-footer" id="map-footer">
+                <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
+                    <div class="badge status-aceito" id="map-status-badge">Conectado</div>
+                    <p style="margin:0; font-size:0.9rem;" id="map-status-text">Aguardando dados...</p>
+                </div>
+                <button id="btn-start-gps" class="btn btn-success btn-full" style="margin-top:1rem; display:none;" onclick="App.map.startGPS()"><i class="ri-navigation-line"></i> Iniciar Rota</button>
+                 <button id="btn-end-gps" class="btn btn-danger btn-full" style="margin-top:1rem; display:none;" onclick="App.map.finishDelivery()"><i class="ri-flag-line"></i> Finalizar Entrega</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="product-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="prod-modal-title">Adicionar Serviço/Produto</h3>
+                <button class="btn btn-secondary btn-sm" onclick="App.store.closeProductModal()">Fechar</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-prod-id">
+                <div class="input-wrapper">
+                    <label>Categoria/Setor</label>
+                    <select id="new-prod-cat" class="input-field" onchange="App.store.checkCategory(this.value)"></select>
+                </div>
+                
+                <div id="hotel-dates-area" style="display:none; background:#f0f9ff; padding:15px; border-radius:8px; border:1px solid #bae6fd; margin-bottom:1rem;">
+                    <h5 style="color:var(--info-dark)">Disponibilidade de Reserva</h5>
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1"><label class="text-xs">Início</label><input type="date" id="hotel-start-date" class="input-field"></div>
+                        <div style="flex:1"><label class="text-xs">Fim</label><input type="date" id="hotel-end-date" class="input-field"></div>
+                    </div>
+                </div>
+
+                <div id="gesso-options-area" style="display:none; background:#fefce8; padding:15px; border-radius:8px; border:1px solid #fde047; margin-bottom:1rem;">
+                    <h5 style="color:var(--warning-dark)">Configuração de Orçamento (Gesso)</h5>
+                    <div class="input-wrapper"><label>Preço do Metro Quadrado (Material)</label><input type="number" id="gesso-price-m2" class="input-field" placeholder="0.00"></div>
+                    <div class="input-wrapper"><label>Valor da Mão de Obra</label><input type="number" id="gesso-labor-val" class="input-field" placeholder="0.00"></div>
+                    <div class="input-wrapper"><label>Tipo de Cobrança da Mão de Obra</label><select id="gesso-labor-type" class="input-field"><option value="fixed">Valor Fixo (R$ por m²)</option><option value="percent">Porcentagem (%) sobre o Material</option></select></div>
+                </div>
+
+                <div id="delivery-options-area" style="display:none; background:#f0fdf4; padding:15px; border-radius:8px; border:1px solid #bbf7d0; margin-bottom:1rem;">
+                    <h5 style="color:var(--success-dark)">Configuração de Entrega</h5>
+                    <div class="input-wrapper"><label>Taxa de Entrega (Opcional)</label><input type="number" id="delivery-fee-val" class="input-field" placeholder="0.00"></div>
+                    <div class="input-wrapper"><label>Tipo da Taxa</label><select id="delivery-fee-type" class="input-field"><option value="fixed">Valor Fixo (R$)</option><option value="percent">Porcentagem (%)</option></select></div>
+                </div>
+
+       <div id="clothing-options-area" style="display:none; background:#fdf2f8; padding:15px; border-radius:8px; border:1px solid #fbcfe8; margin-bottom:1rem;">
+    <h5 style="color:#be185d">Moda e Vestuário</h5>
+    
+    <div class="input-wrapper">
+        <label class="text-xs" style="font-weight:bold; color:#be185d;">Subcategoria</label>
+        <select id="clothing-subcat" class="input-field">
+            <option value="">Selecione...</option>
+            <option value="Masculina">Masculina</option>
+            <option value="Feminina">Feminina</option>
+            <option value="Moda Fitness">Moda Fitness</option>
+            <option value="Moda Praia">Moda Praia</option>
+            <option value="Infantil">Infantil</option>
+            <option value="Acessórios">Acessórios</option>
+        </select>
+    </div>
+
+    <p class="text-xs text-muted" style="margin-bottom:5px;">Tamanhos:</p>
+    <div id="admin-size-list" class="size-selector-container" style="margin-bottom:15px;"></div>
+    <input type="hidden" id="clothing-sizes">
+
+    <p class="text-xs text-muted" style="margin-bottom:5px;">Cores:</p>
+    <div id="admin-color-list" class="size-selector-container" style="margin-bottom:5px;"></div>
+    
+    <input type="text" id="clothing-colors" class="input-field" placeholder="Outras cores (digite aqui se não houver acima)...">
+</div>
+
+                <div class="input-wrapper"><label>Descrição do Produto</label><textarea id="new-prod-desc" class="input-field" rows="3" placeholder="Detalhes do tecido, medidas, estado de conservação..."></textarea></div>
+                <div class="input-wrapper"><label>Nome do Item</label><input type="text" id="new-prod-name" class="input-field" placeholder="Ex: Camiseta"></div>
+                <div class="input-wrapper"><label>Preço Base</label><input type="number" id="new-prod-price" class="input-field" placeholder="0.00"></div>
+                <div class="checkbox-wrapper"><input type="checkbox" id="new-prod-promo"><label for="new-prod-promo" style="margin:0; cursor:pointer; color:var(--danger-dark); font-weight:bold;">Colocar em Promoção?</label></div>
+                <div class="input-wrapper"><label>Fotos (Pode selecionar várias)</label><input type="file" id="new-prod-file" class="input-field" accept="image/*" multiple></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-primary btn-full" onclick="App.store.submitProduct()" id="btn-save-prod">Publicar Serviço</button></div>
+        </div>
+    </div>
+    
+    <div id="chat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Chat</h3><button class="btn btn-secondary btn-sm" onclick="App.chat.close()">Fechar</button></div>
+            <div class="modal-body">
+                <p class="text-sm text-muted">Converse diretamente com o estabelecimento/cliente.</p>
+                <div id="chat-msgs" class="chat-messages"><div style="text-align:center; padding:20px; color:#aaa;">Carregando mensagens...</div></div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" id="chat-input" class="input-field" placeholder="Digite sua mensagem..." autocomplete="off">
+                    <button class="btn btn-secondary btn-sm" style="width:auto" onclick="App.chat.recordAudio()" title="Gravar Áudio"><i class="ri-mic-line"></i></button>
+                    <button class="btn btn-primary btn-sm" style="width:auto" onclick="App.chat.send()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="split-pay-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Fechamento de Conta</h3><button class="btn btn-secondary btn-sm" onclick="document.getElementById('split-pay-modal').style.display='none'">Fechar</button></div>
+            <div class="modal-body">
+                <h2 id="split-total-due" style="text-align:center; color:var(--primary); margin-bottom:20px;">R$ 0,00</h2>
+                <div style="background:#f1f5f9; padding:10px; border-radius:8px; margin-bottom:15px;">
+                    <div class="input-wrapper" style="margin-bottom:5px;"><label>Valor a Pagar Agora</label><input type="number" id="split-amount" class="input-field"></div>
+                    <div class="input-wrapper">
+                        <label>Forma de Pagamento</label>
+                        <select id="split-method" class="input-field" onchange="App.payment.toggleCardFields()"><option value="dinheiro">Dinheiro</option><option value="cartao">Cartão (Crédito/Débito)</option><option value="pix">Pix</option></select>
+                    </div>
+                    <div id="card-fields" style="display:none; gap:10px;"><input type="text" id="card-nsu" class="input-field" placeholder="NSU" style="flex:1"><input type="text" id="card-aut" class="input-field" placeholder="AUT" style="flex:1"></div>
+                    <button class="btn btn-primary btn-sm btn-full" style="margin-top:10px;" onclick="App.payment.addSplit()">Lançar Pagamento</button>
+                </div>
+                <h5>Histórico</h5>
+                <div id="split-history" style="font-size:0.85rem; color:var(--text-muted);"></div>
+                <div style="text-align:right; margin-top:10px; font-weight:bold; color:var(--danger);">Restante: <span id="split-remaining">R$ 0,00</span></div>
+            </div>
+            <div class="modal-footer"><button id="btn-finish-split" class="btn btn-success btn-full" disabled onclick="App.payment.finalizeSplit()">Fechar Conta</button></div>
+        </div>
+    </div>
+
+    <div id="comanda-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width:600px;">
+            <div class="modal-header"><h3 id="comanda-title">Mesa 1</h3><button class="btn btn-secondary btn-sm" onclick="document.getElementById('comanda-modal').style.display='none'">Fechar</button></div>
+            <div class="modal-body">
+                <div class="input-wrapper">
+                    <label>Adicionar Produto</label>
+                    <div style="display:flex; gap:10px;"><input type="text" id="waiter-prod-search" class="input-field" placeholder="Busque o produto..."><button class="btn btn-primary btn-sm" style="width:auto;" onclick="App.waiter.addItem()">Add</button></div>
+                    <div id="waiter-search-results" style="border:1px solid #eee; max-height:150px; overflow-y:auto; display:none;"></div>
+                </div>
+                <h5>Itens do Pedido</h5>
+                <div id="comanda-items-list" style="border:1px solid #eee; padding:10px; min-height:100px; margin-bottom:1rem;"><p class="text-sm text-muted">Nenhum item adicionado.</p></div>
+            </div>
+            <div class="modal-footer">
+                <div style="display:flex; gap:10px;"><button class="btn btn-secondary" onclick="App.waiter.printBill()">Imprimir Conta</button><button class="btn btn-success" onclick="App.waiter.sendToKitchen()">Enviar para Cozinha</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Pagamento Seguro</h3><button class="btn btn-secondary btn-sm" onclick="App.payment.close()">Cancelar</button></div>
+            <div class="modal-body">
+                <div style="text-align:center; margin-bottom:1.5rem; background: var(--info-bg); padding: 1rem; border-radius: var(--radius-sm);">
+                    <p style="color:var(--info-dark); margin-bottom:0.5rem;">Total a pagar:</p>
+                    <h2 id="pay-total-display" style="color:var(--primary); font-size:2.5rem; margin-bottom:0;">R$ 0,00</h2>
+                    <p class="text-xs text-muted" id="pay-detail-display" style="margin-top:0.5rem;">Segurança Mercado Pago</p>
+                </div>
+                <div id="payment-brick_container"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cart-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="ri-shopping-bag-3-line"></i> Seu Carrinho</h3>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('cart-modal').style.display='none'">Fechar</button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="delivery-tabs">
+                <label class="delivery-tab-option">
+                    <input type="radio" name="delivery-method" id="method-delivery" value="entrega" checked onchange="App.cart.toggleAddressField()">
+                    <span class="delivery-tab-label">
+                        <i class="ri-motorbike-line"></i> Entrega
+                    </span>
+                </label>
+                <label class="delivery-tab-option">
+                    <input type="radio" name="delivery-method" id="method-pickup" value="retirada" onchange="App.cart.toggleAddressField()">
+                    <span class="delivery-tab-label">
+                        <i class="ri-store-line"></i> Retirada
+                    </span>
+                </label>
+            </div>
+
+            <div id="delivery-address-container" style="margin-bottom:15px;">
+                <label class="text-xs text-muted" style="margin-bottom:5px; display:block;">Onde devemos entregar?</label>
+                <textarea id="cart-delivery-address" class="input-field" rows="2" placeholder="Rua, Número, Bairro e Ponto de Referência..."></textarea>
+            </div>
+
+            <div id="pickup-info-display" style="display:none; margin-bottom:15px; background: rgba(59,130,246,0.1); padding:10px; border-radius:8px; border:1px solid var(--info-dark);">
+                <p class="text-sm" style="color:var(--info-dark); margin:0;">
+                    <i class="ri-map-pin-user-line"></i> <strong>Retirar em:</strong> <span id="txt-pickup-addr">...</span>
+                </p>
+            </div>
+
+            <label class="text-xs text-muted" style="margin-bottom:5px; display:block;">Itens do Pedido</label>
+            <div id="cart-items-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+            <div class="cart-summary-box">
+                <div class="coupon-row">
+                    <input type="text" id="cart-coupon-input" class="input-field" placeholder="CUPOM">
+                    <button class="btn btn-sm btn-secondary" onclick="App.cart.applyCoupon()">Aplicar</button>
+                </div>
+                <div id="coupon-msg" class="text-xs" style="margin-top:-10px; margin-bottom:10px; min-height:1rem;"></div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="label-subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row" id="row-delivery-fee">
+                    <span>Taxa de Entrega</span>
+                    <span id="label-delivery-fee" style="color:var(--danger)">+ R$ 0,00</span>
+                </div>
+                <div class="summary-row" id="row-discount" style="display:none;">
+                    <span>Desconto</span>
+                    <span id="label-discount" style="color:var(--success)">- R$ 0,00</span>
+                </div>
+                
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="cart-total-modal">R$ 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-success btn-full" style="height: 50px; font-size: 1.1rem;" onclick="App.cart.checkout()">
+                Finalizar Compra <i class="ri-arrow-right-line"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+    <div id="budget-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Calculadora de Orçamento</h3>
+                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('budget-modal').style.display='none'">Fechar</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="budget-prod-id">
+                <input type="hidden" id="budget-store-id">
+                <input type="hidden" id="budget-base-price"> 
+                <input type="hidden" id="budget-labor-val"> 
+                <input type="hidden" id="budget-labor-type"> 
+                <div class="input-wrapper">
+                    <label>Metragem da Área (m²)</label>
+                    <input type="number" id="budget-area" class="input-field" placeholder="Ex: 25" oninput="App.client.calculateBudget()">
+                </div>
+                <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0; margin-top:10px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Custo Material:</span><span id="display-material">R$ 0,00</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; color:var(--info-dark);"><span>Custo Mão de Obra:</span><span id="display-labor">R$ 0,00</span></div>
+                    <hr style="margin:10px 0; border-color:#e2e8f0;">
+                    <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem; color:var(--primary);"><span>Total Orçado:</span><span id="display-total">R$ 0,00</span></div>
+                    <p class="text-xs text-muted" style="margin-top:10px; text-align:center;">*Pagamento: 50% de entrada e 50% na finalização.</p>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-success btn-full" onclick="App.client.finishBudgetOrder()">Pagar Sinal (50%)</button></div>
+        </div>
+    </div>
+
+    <div id="image-zoom-modal" class="modal-overlay" style="z-index: 99999; background: rgba(0,0,0,0.95);" onclick="App.ui.closeZoom()">
+        <span style="position:absolute; top:20px; right:30px; font-size:40px; color:#fff; cursor:pointer;">×</span>
+        <img id="img-zoom-target" style="max-width:90%; max-height:90vh; margin:auto; display:block; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius:4px;">
+    </div>
+
+    <div id="confirm-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 350px;">
+        <div class="modal-body confirm-box">
+            <i class="ri-error-warning-line confirm-icon"></i>
+            <h3>Tem certeza?</h3>
+            <p id="confirm-text" class="text-muted">Essa ação não pode ser desfeita.</p>
+            <div class="confirm-actions">
+                <button class="btn btn-secondary btn-full" onclick="App.ui.closeConfirm()">Cancelar</button>
+                <button id="btn-confirm-yes" class="btn btn-danger btn-full">Sim, Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="https://wa.me/5585921468353?text=Olá, preciso de ajuda com o Sistema Naxio." 
+       target="_blank" 
+       class="btn-support" 
+       title="Falar com Suporte">
+        <i class="ri-whatsapp-line"></i>
+    </a>
+
+
+<div id="custom-alert-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 320px; border-radius: 20px;">
+            <div class="alert-box">
+                <i id="alert-icon" class="ri-checkbox-circle-fill alert-icon success"></i>
+                <h3 id="alert-title" class="alert-title">Sucesso!</h3>
+                <p id="alert-msg" class="alert-msg">Operação realizada.</p>
+                <button class="btn btn-primary btn-full" onclick="document.getElementById('custom-alert-modal').style.display='none'">Entendi</button>
+            </div>
+        </div>
+    </div>
+<script src="./js/core.js"></script>
+
+    <script type="module" src="./js/main.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+        // Limpa cache antigo de Service Worker para evitar bugs
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(r => r.forEach(reg => reg.unregister()));
+        }
+
+        // Aguarda o main.js carregar tudo e inicia o App
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (window.App && window.App.init) {
+                    console.log("🚀 Sistema Modular Iniciado!");
+                    window.App.init();
+                } else {
+                    console.error("ERRO: App não iniciado. Verifique se o main.js está importando os módulos.");
+                }
+            }, 500); // Pequeno delay para garantir o carregamento dos módulos
+        });
+    </script>
+</body>
+</html>
+
+    

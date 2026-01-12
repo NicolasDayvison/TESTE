@@ -1,0 +1,1690 @@
+/* ==========================================================================
+   NEXLOG THEME v9.0 - FINAL MOBILE UX
+   ========================================================================== */
+
+:root {
+    --primary: #06b6d4;
+    --primary-dark: #0891b2;
+    --primary-light: #164e63;
+    --primary-fade: rgba(6, 182, 212, 0.15);
+    
+    --surface: #1e293b;
+    --background: #0f172a;
+    
+    --border: #334155;
+    
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    
+    --success: #10b981;
+    --success-bg: #064e3b;
+    --success-dark: #34d399;
+    
+    --warning: #f59e0b;
+    --warning-bg: #451a03;
+    --warning-dark: #fbbf24;
+    
+    --danger: #ef4444;
+    --danger-bg: #450a0a;
+    --danger-dark: #f87171;
+    
+    --info: #3b82f6;
+    --info-bg: #172554;
+    --info-dark: #60a5fa;
+
+    /* Comandas */
+    --comanda-livre: #059669;
+    --comanda-aberta: #dc2626;
+    --comanda-bloqueada: #475569;
+    --comanda-em-uso: #2563eb; 
+    --comanda-avulso: #ea580c;
+    --comanda-fechada: #9333ea;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    --nav-height: 70px;
+    --mobile-nav-height: 65px;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background-color: var(--background); 
+    background-image: url('https://raw.githubusercontent.com/PazChurchParaipaba/projetoentrega/refs/heads/main/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 500px;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+    color: var(--text-main); 
+    min-height: 100vh; 
+    padding-bottom: calc(var(--mobile-nav-height) + 20px); 
+    overflow-x: hidden; 
+}
+
+/* Tipografia */
+h1, h2, h3, h4, h5 { font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; color: var(--text-main); }
+h1 { font-size: 2rem; } h2 { font-size: 1.75rem; } h3 { font-size: 1.5rem; }
+p { color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; font-size: 0.95rem; }
+.text-sm { font-size: 0.875rem; } .text-xs { font-size: 0.75rem; }
+.text-center { text-align: center; } .text-muted { color: var(--text-muted); }
+
+/* Componentes */
+.btn { 
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; 
+    padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; 
+    cursor: pointer; transition: var(--transition); border: none; outline: none; text-decoration: none; 
+}
+.btn:active { transform: scale(0.98); }
+.btn-full { width: 100%; }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #0f172a; box-shadow: 0 4px 12px rgba(6,182,212,0.3); }
+.btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+.btn-success { background: var(--success); color: #0f172a; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-info { background: var(--info); color: white; }
+.btn-warning { background: var(--warning); color: #451a03; }
+
+/* Inputs */
+.input-wrapper, .form-group { margin-bottom: 1.2rem; }
+label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+.input-field { 
+    width: 100%; padding: 0.8rem 1rem; background: #0f172a; border: 1px solid var(--border); 
+    border-radius: var(--radius-sm); color: var(--text-main); font-size: 1rem; 
+}
+.input-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px var(--primary-fade); }
+select.input-field { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; appearance: none; }
+.checkbox-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: var(--radius-sm); border: 1px dashed var(--danger); }
+.checkbox-wrapper input { width: 20px; height: 20px; accent-color: var(--danger); }
+
+/* Layout */
+.container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+/* CARD DE PRODUTO */
+.card { 
+    background: var(--surface); border-radius: var(--radius-md); 
+    padding: 1rem; border: 1px solid var(--border); 
+    display: flex !important; flex-direction: column !important; 
+    height: 100% !important; justify-content: space-between !important;
+    overflow: hidden; 
+    position: relative;
+}
+
+/* Galeria */
+.product-gallery-wrapper {
+    position: relative;
+    width: calc(100% + 2rem);
+    height: 250px !important;
+    background: #0f172a;
+    margin: -1rem -1rem 1rem -1rem;
+    overflow: hidden !important;
+    display: flex;
+}
+.product-gallery { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; height: 100%; width: 100%; }
+.product-gallery::-webkit-scrollbar { display: none; }
+.gallery-img { 
+    flex: 0 0 100%; width: 100% !important; height: 100% !important; 
+    object-fit: cover !important; object-position: center !important;
+    scroll-snap-align: start; cursor: zoom-in; transition: transform 0.3s;
+}
+.gallery-img:hover { transform: scale(1.05); }
+
+/* Badge Promoção */
+.badge-promo { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    background: var(--danger); 
+    color: white; 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    font-weight: bold; 
+    z-index: 10; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.card .btn-full, .card .btn-success { margin-top: auto !important; }
+
+/* --- Banner PWA (Botão Topo Direito) --- */
+.pwa-banner { 
+    position: fixed;
+    top: 15px;           /* Alinhado com a altura da Logo */
+    right: 15px;         /* Colado na direita */
+    left: auto;          /* Remove alinhamento antigo */
+    transform: none;     /* Remove centralização antiga */
+    width: auto;         /* Tamanho automático conforme o texto */
+    max-width: none;
+    
+    background: var(--primary); /* Fundo Azul/Ciano */
+    color: #0f172a;      /* Texto Escuro (Contraste) */
+    
+    padding: 8px 16px;
+    border-radius: 50px; /* Formato de Pílula */
+    border: none;
+    
+    z-index: 10001;      /* Acima do Header */
+    display: none;       /* JS controla quando aparece */
+    align-items: center;
+    gap: 8px;
+    
+    font-weight: 800;
+    font-size: 0.85rem;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.6); /* Brilho Neon */
+    cursor: pointer;
+    
+    animation: slideInRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pwa-banner i {
+    font-size: 1.2rem;
+}
+
+/* Animação de entrada vindo da direita */
+@keyframes slideInRight {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Esconde no Desktop */
+@media (min-width: 769px) {
+    .pwa-banner {
+        display: none !important;
+    }
+}
+
+@keyframes slideDown {
+    from { transform: translate(-50%, -20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@media (min-width: 769px) {
+    .pwa-banner {
+        display: none !important;
+    }
+}
+
+/* --- Barra de Categorias (Scroll Horizontal) --- */
+.category-scroll { 
+    display: flex; 
+    gap: 10px; 
+    overflow-x: auto; 
+    padding: 5px 5px 15px 5px; 
+    scrollbar-width: none; 
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+
+.cat-pill { 
+    padding: 8px 20px; 
+    background: var(--surface); 
+    border: 1px solid var(--border); 
+    border-radius: 50px; 
+    color: var(--text-muted); 
+    white-space: nowrap; 
+    cursor: pointer; 
+    font-size: 0.9rem;
+    transition: 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.cat-pill.active { 
+    background: var(--primary); 
+    color: #0f172a; 
+    border-color: var(--primary); 
+    font-weight: 800; 
+    box-shadow: 0 0 15px var(--primary-fade);
+}
+
+.sticky-category-bar { display: none !important; }
+
+/* Badges e Status */
+.badge { display: inline-flex; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.status-pendente { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+.status-aceito { background: rgba(59, 130, 246, 0.2); color: var(--info-dark); border: 1px solid var(--info); }
+.status-concluido { background: rgba(16, 185, 129, 0.2); color: var(--success-dark); border: 1px solid var(--success); }
+.status-em_rota { background: #1e3a8a; color: #93c5fd; animation: pulse 2s infinite; }
+
+/* Flutuante e Modais */
+.cart-floater {
+    position: fixed; bottom: 90px; right: 20px;
+    background: #0f172a; border: 1px solid var(--primary); color: white; 
+    padding: 10px 20px; border-radius: 50px; display: none; align-items: center; gap: 15px;
+    cursor: pointer; z-index: 100; animation: slideInUp 0.3s;
+}
+.cart-badge { 
+    position: absolute; top: -8px; right: -8px; background: var(--primary); color: #0f172a; 
+    border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; 
+}
+
+.modal-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+    z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-content { 
+    background: var(--surface); width: 100%; max-width: 500px; 
+    border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);
+    display: flex; flex-direction: column; max-height: 90vh; animation: zoomInModal 0.2s;
+}
+.modal-header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+.modal-body { padding: 1.5rem; overflow-y: auto; color: var(--text-main); }
+.modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+
+#image-zoom-modal img { animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes zoomInModal { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* Box Cliente Mesa */
+.box-mesa-cliente {
+    background: #e0f2fe !important; border: 1px solid #bae6fd;
+    padding: 15px; border-radius: var(--radius-md); margin-top: 15px; color: #0c4a6e !important;
+}
+.box-mesa-cliente input { background: #ffffff !important; border: 1px solid #7dd3fc !important; color: #0f172a !important; }
+.box-mesa-cliente strong { color: #0369a1 !important; display: block; margin-bottom: 5px; }
+
+/* Seletores */
+.size-selector-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.size-box { 
+    border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; 
+    cursor: pointer; font-size: 0.9rem; color: var(--text-main); 
+}
+.size-box.selected { background: var(--primary); color: #0f172a; border-color: var(--primary); font-weight: bold; }
+
+/* Chat */
+.chat-messages { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px; }
+.chat-bubble { padding: 10px 14px; border-radius: 12px; max-width: 85%; font-size: 0.9rem; word-wrap: break-word; }
+.chat-bubble.mine { align-self: flex-end; background: var(--primary); color: #0f172a; border-bottom-right-radius: 2px; }
+.chat-bubble.theirs { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 2px; }
+
+/* Sticky Header */
+header { 
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); 
+    height: var(--nav-height); border-bottom: 1px solid var(--border); 
+    display: flex; align-items: center; justify-content: space-between; 
+    padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; 
+}
+.logo-img { height: 40px; }
+
+/* Painel Admin Grid */
+.auto-print-box {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); padding: 8px 15px; border-radius: var(--radius-sm); 
+    border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; 
+    width: 100%; max-width: 180px; margin-left: auto; margin-bottom: 10px;
+}
+.admin-actions-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+}
+.admin-actions-grid .btn {
+    width: 100% !important; justify-content: center; padding: 12px 10px;
+    font-size: 0.85rem; height: 100%; display: flex; flex-direction: column; gap: 5px;
+}
+.admin-actions-grid .btn i { font-size: 1.2rem; }
+
+/* Animações e Mobile */
+.view-section { display: none; animation: slideInUp 0.3s ease-out; }
+.view-section.active { display: block; }
+@keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@media (min-width: 769px) { 
+    .bottom-nav { display: none; } 
+    .desktop-only { display: block !important; } 
+}
+@media (max-width: 768px) { 
+    .desktop-only { display: none !important; } 
+    .bottom-nav { display: flex; }
+    .admin-actions-grid { grid-template-columns: repeat(2, 1fr); }
+    .auto-print-box { max-width: 100%; }
+}
+/* ==========================================================================
+   MODERN CART UI
+   ========================================================================== */
+
+/* Abas de Entrega vs Retirada */
+.delivery-tabs {
+    display: flex;
+    background: #0f172a;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 5px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border);
+}
+
+.delivery-tab-option {
+    flex: 1;
+    position: relative;
+}
+
+.delivery-tab-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.delivery-tab-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Estado Ativo da Aba */
+.delivery-tab-option input[type="radio"]:checked + .delivery-tab-label {
+    background: var(--surface);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Item do Carrinho */
+.cart-item-modern {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+}
+
+.cart-item-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.cart-item-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.btn-remove-item {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-remove-item:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Resumo do Pedido (Box Inferior) */
+.cart-summary-box {
+    background: rgba(15, 23, 42, 0.5); /* Fundo escuro sutil */
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.coupon-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.coupon-row input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: white;
+    flex: 1;
+    text-transform: uppercase;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 10px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.summary-total span:last-child {
+    color: var(--success); /* Preço verde */
+}
+/* --- Animação de Erro (Shake) --- */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.input-error {
+    animation: shake 0.4s ease-in-out;
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important; /* Brilho vermelho */
+}
+/* --- LISTA DE PRODUTOS ADMIN (Novo Design) --- */
+.admin-product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-product-card:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    background: linear-gradient(90deg, var(--surface) 0%, rgba(6, 182, 212, 0.05) 100%);
+}
+
+.admin-prod-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.admin-prod-info span {
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: bold;
+    display: block;
+    margin-top: 4px;
+}
+
+.admin-prod-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon-action {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.2s;
+}
+
+.btn-edit { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.btn-edit:hover { background: #2563eb; color: white; }
+
+.btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+.btn-delete:hover { background: #dc2626; color: white; }
+
+/* --- MODAL DE CONFIRMAÇÃO (Bonito) --- */
+#confirm-modal {
+    z-index: 10000; /* Acima de tudo */
+}
+
+.confirm-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.confirm-icon {
+    font-size: 3rem;
+    color: var(--warning);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+/* --- PAINEL ADMIN 2.0 (Design Fluido) --- */
+
+/* 1. Mesas como Botões (Cards Interativos) */
+.tables-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); /* Botões quadrados */
+    gap: 12px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.table-btn {
+    aspect-ratio: 1; /* Mantém quadrado */
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.table-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+.table-btn span {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    z-index: 2;
+}
+
+.table-btn small {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+/* Cores de Status das Mesas */
+.table-btn.status-livre { 
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.1) 100%); 
+    border-color: var(--success); 
+}
+.table-btn.status-livre span { color: var(--success); }
+
+.table-btn.status-aberta { 
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(239, 68, 68, 0.15) 100%); 
+    border-color: var(--danger); 
+    animation: pulse-red 2s infinite;
+}
+.table-btn.status-aberta span { color: var(--danger); }
+
+/* 2. Listas Retráteis (Sem altura fixa) */
+.dynamic-list-box {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 0; /* Padding controlado pelos filhos */
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.dynamic-list-header {
+    padding: 15px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dynamic-list-content {
+    /* O SEGREDO: Sem height fixa, max-height alto para permitir crescer */
+    min-height: 0; 
+    max-height: 400px; /* Limite máximo antes de rolar */
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Estado Vazio (Empty State) */
+.empty-state-box {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    margin: 10px;
+    background: rgba(0,0,0,0.1);
+}
+
+.empty-state-box i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+/* --- Botão de Suporte (Estilo do Site) --- */
+.btn-support {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Canto Inferior Esquerdo */
+    width: 50px;
+    height: 50px;
+    
+    /* Cores do Tema Naxio */
+    background: var(--surface); /* Fundo Escuro */
+    color: var(--primary);      /* Ícone Ciano */
+    border: 1px solid var(--primary); 
+    
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    
+    /* Sombra suave azulada */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9990;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-support:hover {
+    background: var(--primary); /* Fica Ciano ao passar o mouse */
+    color: #0f172a;             /* Ícone escuro para contraste */
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px var(--primary-fade); /* Brilho Neon */
+}
+
+.btn-support:active {
+    transform: scale(0.95);
+}
+
+/* Ajuste para Celular */
+@media (max-width: 768px) {
+    .btn-support {
+        bottom: 85px; /* Acima do menu inferior */
+        left: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}
+/* --- BARRA DE NAVEGAÇÃO MOBILE (Fix Imagem 10) --- */
+.bottom-nav {
+    display: flex !important;
+    justify-content: space-around; /* Espaça igualmente */
+    align-items: center;
+    width: 100%;
+    height: 65px; /* Altura fixa */
+    background: rgba(15, 23, 42, 0.98); /* Fundo escuro quase sólido */
+    backdrop-filter: blur(10px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid var(--border);
+    z-index: 10000; /* Garante que fique acima de tudo */
+    padding-bottom: env(safe-area-inset-bottom); /* Proteção para iPhone X+ */
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column; /* Ícone em cima, texto embaixo */
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.7rem; /* Texto pequeno */
+    font-weight: 600;
+    flex: 1; /* Ocupa espaço igual */
+    height: 100%;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-item i {
+    font-size: 1.4rem; /* Ícone maior */
+    margin-bottom: 2px;
+}
+
+.nav-item.active {
+    color: var(--primary); /* Cor ativa (Ciano) */
+}
+
+.nav-item.active i {
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px var(--primary-fade);
+}
+
+/* Esconde no Desktop */
+@media (min-width: 769px) {
+    .bottom-nav { display: none !important; }
+}
+/* --- BANNER PWA (Discreto no Topo) --- */
+.pwa-banner { 
+    position: fixed;
+    top: 18px; /* Alinhado com a Logo */
+    right: 15px; /* Canto direito */
+    left: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    background: var(--primary); /* Azul Ciano */
+    color: #0f172a; /* Texto escuro */
+    padding: 6px 14px;
+    border-radius: 50px;
+    z-index: 10002; /* Acima do Header */
+    display: none; /* Controlado pelo JS */
+    align-items: center;
+    gap: 6px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+    cursor: pointer;
+    border: none;
+}
+
+/* --- LISTA DE CATEGORIAS (Scroll Horizontal) --- */
+/* Onde a seta verde apontava */
+.category-scroll { 
+    display: flex; 
+    gap: 10px; 
+    overflow-x: auto; /* Permite rolar para o lado */
+    padding: 5px 5px 15px 5px; 
+    scrollbar-width: none; /* Esconde barra de rolagem */
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+
+.cat-pill { 
+    padding: 8px 20px; 
+    background: var(--surface); 
+    border: 1px solid var(--border); 
+    border-radius: 50px; 
+    color: var(--text-muted); 
+    white-space: nowrap; 
+    cursor: pointer; 
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-shrink: 0; /* Impede de encolher */
+}
+
+.cat-pill.active { 
+    background: var(--primary); 
+    color: #0f172a; 
+    border-color: var(--primary); 
+    font-weight: 800; 
+}
+/* --- 1. NOVO ALERTA PERSONALIZADO (Substitui o alert do navegador) --- */
+#custom-alert-modal {
+    z-index: 10002; /* Acima de tudo */
+}
+
+.alert-box {
+    text-align: center;
+    padding: 25px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.alert-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.alert-icon.success { color: var(--success); }
+.alert-icon.error { color: var(--danger); }
+.alert-icon.info { color: var(--primary); }
+
+.alert-title { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
+.alert-msg { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+/* --- 2. CORREÇÃO DO MODAL DE PRODUTO (Imagem 15 - Dark Mode) --- */
+/* Remove fundos coloridos claros e força o tema escuro */
+#clothing-options-area, 
+#gesso-options-area, 
+#delivery-options-area, 
+#hotel-dates-area {
+    background: rgba(15, 23, 42, 0.6) !important; /* Fundo escuro */
+    border: 1px dashed var(--border) !important;
+    color: var(--text-main) !important;
+}
+
+#clothing-options-area h5,
+#gesso-options-area h5 {
+    color: var(--primary) !important; /* Títulos em Ciano */
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+#clothing-options-area label {
+    color: var(--text-muted) !important;
+}
+
+/* Ajuste dos Seletores de Tamanho no Admin */
+.size-box {
+    background: #0f172a;
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+.size-box.admin-selected {
+    background: var(--primary);
+    color: #0f172a;
+    border-color: var(--primary);
+    font-weight: 800;
+    box-shadow: 0 0 10px var(--primary-fade);
+}
+
+/* --- 3. GRID DE MESAS (Imagem 7 e 13) --- */
+.tables-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    padding: 10px;
+}
+
+.table-btn {
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
+
+.table-btn:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+/* Status da Mesa */
+.table-btn.status-livre span { color: var(--success); font-weight: bold; font-size: 1.2rem; }
+.table-btn.status-aberta { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+.table-btn.status-aberta span { color: var(--danger); font-weight: bold; font-size: 1.2rem; }
+/* ==========================================================================
+   CORREÇÃO VISUAL: TEMA DARK NAXIO (Modais e Admin)
+   ========================================================================== */
+
+/* 1. FORÇA TODAS AS JANELAS (MODAIS) A SEREM ESCURAS */
+.modal-content {
+    background-color: #1e293b !important; /* Azul Escuro (Surface) */
+    color: #f1f5f9 !important;            /* Texto Claro */
+    border: 1px solid #334155 !important; /* Borda Sutil */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
+}
+
+/* 2. CORRIGE INPUTS DENTRO DOS MODAIS (Tira o fundo branco) */
+.modal-content input, 
+.modal-content select, 
+.modal-content textarea {
+    background-color: #0f172a !important; /* Fundo mais escuro */
+    border: 1px solid #334155 !important;
+    color: white !important;
+    border-radius: 8px !important;
+}
+
+.modal-content input:focus, 
+.modal-content select:focus {
+    border-color: #06b6d4 !important; /* Foco Ciano */
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+}
+
+/* 3. MODAL DE NOVO PRODUTO (Remove o fundo rosa) */
+#clothing-options-area {
+    background-color: rgba(15, 23, 42, 0.5) !important; /* Escuro transparente */
+    border: 1px dashed #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+#clothing-options-area h5 {
+    color: #06b6d4 !important; /* Título Ciano */
+    border-bottom: 1px solid #334155 !important;
+}
+
+/* Seletores de Tamanho/Cor (Estilo Botão) */
+.size-box {
+    background-color: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.size-box.selected, .size-box.admin-selected {
+    background-color: #06b6d4 !important; /* Ciano ativo */
+    color: #0f172a !important;             /* Texto escuro */
+    border-color: #06b6d4 !important;
+    font-weight: 800 !important;
+}
+
+/* 4. CARRINHO DE COMPRAS (Estilo Lista) */
+.cart-item-modern {
+    background: rgba(255, 255, 255, 0.02); /* Leve destaque */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+/* Botão de Remover (X) mais bonito */
+.btn-remove-item {
+    background: rgba(239, 68, 68, 0.15) !important; /* Vermelho suave */
+    color: #ef4444 !important;
+    border-radius: 8px !important;
+    transition: 0.2s;
+}
+.btn-remove-item:hover {
+    background: #ef4444 !important;
+    color: white !important;
+}
+
+/* 5. DASHBOARD ADMIN (Botões Coloridos e Métricas) */
+.metric-card {
+    background: linear-gradient(145deg, #1e3a8a, #172554) !important; /* Degradê Azul */
+    border: 1px solid rgba(255,255,255,0.05) !important;
+}
+.metric-card .value {
+    color: #22d3ee !important; /* Ciano Neon */
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Botões de Ação Rápida (Caixa, PDV, Novo) */
+.admin-actions-grid .btn {
+    border: 1px solid #334155 !important;
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    transition: all 0.3s ease;
+}
+
+.admin-actions-grid .btn:hover {
+    border-color: #06b6d4 !important;
+    color: #06b6d4 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+}
+
+/* Destaque para o botão "Novo" */
+.admin-actions-grid .btn-primary {
+    background: #06b6d4 !important;
+    color: #0f172a !important;
+    font-weight: 800;
+}
+
+/* 6. CAIXA FECHADO / ABRIR CAIXA */
+/* Remove o fundo branco do modal de caixa */
+.modal-body h2, .modal-body h3, .modal-body p, .modal-body label {
+    color: #f1f5f9 !important;
+}
+.modal-body hr {
+    border-color: #334155 !important;
+}
+
+/* 7. ALERTA PERSONALIZADO (Substitui o Alert Feio) */
+#custom-alert-modal .modal-content {
+    background: #1e293b;
+    border: 1px solid #06b6d4; /* Borda Ciano */
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+}
+#alert-title { color: #06b6d4; font-weight: 800; text-transform: uppercase; }
+#alert-msg { color: #cbd5e1; font-size: 1rem; }
+
+/* --- LAYOUT CLIENTE COM SIDEBAR --- */
+.client-layout-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Esquerda fixa 300px, Direita resto */
+    gap: 20px;
+    align-items: start;
+}
+
+/* --- BOTÃO DE DÚVIDAS (Estilo Azul/Neon) --- */
+.btn-faq-float {
+    position: fixed;
+    bottom: 80px; /* No Desktop: Fica acima do WhatsApp (20px + 50px + 10px) */
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    
+    /* Cores do Tema (Igual ao do WhatsApp agora) */
+    background: var(--surface); 
+    color: var(--primary);      /* Ícone Ciano */
+    border: 1px solid var(--primary);
+    
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    
+    z-index: 9990;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Efeito Hover (Brilho) */
+.btn-faq-float:hover {
+    background: var(--primary); /* Fica Ciano */
+    color: #0f172a;             /* Ícone Escuro */
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px var(--primary-fade);
+}
+
+/* Ajuste para Celular (Para não bater no menu ou no WhatsApp) */
+@media (max-width: 768px) {
+    .btn-faq-float {
+        bottom: 145px !important; /* 85px (Zap) + 50px (Altura) + 10px (Espaço) */
+        left: 15px !important;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}
+/* --- Botão Dúvidas no Card do Produto --- */
+.btn-doubt-card {
+    background: rgba(255, 255, 255, 0.05); /* Fundo sutil */
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-doubt-card i { font-size: 0.9rem; }
+
+.btn-doubt-card:hover {
+    border-color: var(--primary);
+    color: var(--primary); /* Texto Ciano */
+    background: rgba(6, 182, 212, 0.1); /* Brilho suave */
+    transform: translateY(-1px);
+}
+/* ==========================================================================
+   MODAIS PREMIUM (Caixa, Fiscal, Produtos) - DESIGN FINAL
+   ========================================================================== */
+
+/* 1. Estrutura da Janela (Dark & Clean) */
+.modal-content {
+    background: #1e293b !important; /* Azul Escuro */
+    border: 1px solid #334155 !important; /* Borda Sutil */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: rgba(15, 23, 42, 0.5) !important; /* Mais escuro no topo */
+    border-bottom: 1px solid #334155 !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+.modal-header h3 {
+    font-size: 1.1rem !important;
+    color: #f1f5f9 !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 !important;
+}
+
+.modal-body {
+    padding: 1.5rem !important;
+    color: #94a3b8 !important; /* Texto cinza claro */
+}
+
+/* 2. Inputs Modernos dentro dos Modais */
+.modal-content .input-field {
+    background: #0f172a !important; /* Fundo quase preto */
+    border: 1px solid #334155 !important;
+    color: #f1f5f9 !important;
+    border-radius: 10px !important;
+    padding: 12px 15px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease;
+}
+
+.modal-content .input-field:focus {
+    border-color: var(--primary) !important; /* Ciano no foco */
+    box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1) !important;
+}
+
+.modal-content label {
+    color: #cbd5e1 !important; /* Label mais clara */
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
+}
+
+/* 3. Cards Internos (Ex: Info do Fiscal) */
+.info-box-modern {
+    background: rgba(6, 182, 212, 0.05); /* Ciano bem suave */
+    border: 1px dashed rgba(6, 182, 212, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.info-box-modern h5 {
+    color: var(--primary) !important;
+    margin-bottom: 5px !important;
+    font-size: 0.9rem !important;
+}
+
+/* 4. Lista de Movimentações (Caixa) */
+.movimentacao-item {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid #334155;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+.movimentacao-item:last-child { border-bottom: none; }
+
+/* 5. Botões de Ação no Rodapé */
+.modal-footer {
+    background: rgba(15, 23, 42, 0.3) !important;
+    border-top: 1px solid #334155 !important;
+    padding: 1.25rem 1.5rem !important;
+}
+/* --- RESTAURAÇÃO: PAINEL CLIENTE PREMIUM --- */
+
+/* Box de Conversas */
+.client-conversas-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #1e3a8a; /* Borda Azul Escura */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.client-conversas-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #3b82f6; /* Ícone Azul */
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+/* Item da Conversa */
+.conversa-item {
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.conversa-item:hover {
+    border-color: var(--primary);
+    transform: translateX(5px);
+}
+
+.conversa-item h4 { margin: 0; font-size: 1rem; color: #f1f5f9; }
+.conversa-item p { margin: 0; font-size: 0.8rem; color: #94a3b8; }
+
+/* Botão Voltar ao Catálogo */
+.btn-back-catalog {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.btn-back-catalog:hover {
+    background: #1e293b;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+/* ==========================================================================
+   PAINEL CLIENTE 2.0 (MODERNO & DARK)
+   ========================================================================== */
+
+/* 1. Box "Está na Mesa" (Agora Dark e Elegante) */
+.box-mesa-cliente {
+    background: linear-gradient(145deg, #1e293b, #0f172a); /* Degradê sutil */
+    border: 1px solid rgba(6, 182, 212, 0.3); /* Borda Ciano suave */
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de brilho no fundo */
+.box-mesa-cliente::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.box-mesa-cliente h4 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.box-mesa-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+/* Input integrado ao tema */
+.box-mesa-cliente input {
+    background: #020617 !important;
+    border: 1px solid #334155 !important;
+    color: white !important;
+    padding: 12px 15px !important;
+    font-size: 1rem;
+    border-radius: 10px !important;
+    flex: 1;
+    transition: 0.3s;
+}
+
+.box-mesa-cliente input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15) !important;
+}
+
+/* 2. Lista de Conversas (Cards Interativos) */
+.client-conversas-box {
+    margin-top: 30px;
+}
+
+.client-conversas-header {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.conversa-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.conversa-item:hover {
+    background: #2a3855; /* Levemente mais claro */
+    border-color: var(--primary);
+    transform: translateX(5px); /* Animação de deslize */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.conversa-info h4 { margin: 0; color: #f1f5f9; font-size: 1rem; }
+.conversa-info p { margin: 2px 0 0 0; color: var(--primary); font-size: 0.8rem; font-weight: 600; }
+
+/* Seta de navegação */
+.conversa-arrow {
+    width: 30px; height: 30px;
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary);
+}
+
+/* 3. Estado Vazio (Empty State) Bonito */
+.empty-orders {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px dashed #334155;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.3);
+    color: var(--text-muted);
+}
+.empty-orders i { font-size: 3rem; margin-bottom: 10px; display: block; opacity: 0.5; }
+
+/* 4. Botão Voltar (Estilo Outline Moderno) */
+.btn-back-catalog {
+    margin-top: 30px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+}
+
+.btn-back-catalog:hover {
+    border-color: var(--text-main);
+    color: var(--text-main);
+    background: rgba(255,255,255,0.05);
+}
+/* ==========================================================================
+   CHAT MODERNO (Estilo App Mensagem)
+   ========================================================================== */
+
+/* 1. Modal e Layout */
+#chat-modal .modal-content {
+    height: 85vh; /* Altura fixa para parecer app */
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    overflow: hidden;
+}
+
+#chat-modal .modal-header {
+    background: #1e293b;
+    padding: 15px 20px;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+#chat-modal .modal-body {
+    padding: 0 !important; /* Remove padding padrão */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 2. Área das Mensagens */
+#chat-msgs {
+    flex: 1;
+    background-color: #0b1120;
+    /* Padrão de fundo sutil */
+    background-image: radial-gradient(#334155 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Barra de rolagem fina */
+#chat-msgs::-webkit-scrollbar { width: 5px; }
+#chat-msgs::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+/* 3. Balões de Mensagem */
+.chat-bubble {
+    max-width: 75%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    word-wrap: break-word;
+}
+
+/* Minhas Mensagens (Direita) */
+.chat-bubble.mine {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary)); /* Ciano Degradê */
+    color: #0f172a;
+    font-weight: 500;
+    border-radius: 18px 18px 4px 18px; /* Canto pontudo embaixo na direita */
+}
+
+/* Mensagens Deles (Esquerda) */
+.chat-bubble.theirs {
+    align-self: flex-start;
+    background: #334155; /* Cinza Escuro */
+    color: #f1f5f9;
+    border-radius: 18px 18px 18px 4px; /* Canto pontudo embaixo na esquerda */
+}
+
+/* Status e Edição */
+.chat-status { font-size: 0.7rem; text-align: right; margin-top: 4px; opacity: 0.7; }
+.chat-edited-label { font-size: 0.7rem; font-style: italic; margin-left: 5px; opacity: 0.8; }
+.chat-deleted { color: rgba(255,255,255,0.6); font-style: italic; font-size: 0.9rem; }
+
+/* Player de Áudio Dark */
+.chat-bubble audio {
+    height: 35px;
+    max-width: 200px;
+    filter: invert(0.9) hue-rotate(180deg); /* Inverte cores para ficar dark */
+    border-radius: 20px;
+}
+
+/* 4. Barra de Digitação (Footer) */
+.chat-footer {
+    background: #1e293b;
+    padding: 10px 15px;
+    border-top: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+    flex: 1;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    transition: 0.2s;
+}
+
+.chat-input-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
+}
+
+.chat-input-field {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 12px 0;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Botões Redondos */
+.btn-chat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-mic { background: #334155; color: #94a3b8; }
+.btn-mic:hover { color: #fff; background: #475569; }
+
+.btn-send { background: var(--primary); color: #0f172a; box-shadow: 0 0 10px rgba(6,182,212,0.3); }
+.btn-send:hover { transform: scale(1.05); }
+
+/* Avatar no Header */
+.chat-header-info { display: flex; align-items: center; gap: 10px; }
+.chat-avatar-circle {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: bold; font-size: 1rem;
+}
+.chat-user-name h4 { margin: 0; font-size: 1rem; color: #f1f5f9; }
+.chat-user-status { font-size: 0.75rem; color: var(--primary); }
+/* ==========================================================================
+   NAVBAR PREMIUM (DESKTOP & HEADER)
+   ========================================================================== */
+
+/* Header Fixo com Efeito Vidro */
+header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    height: 70px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%; /* Mais espaço nas laterais */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* Marca/Logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+/* Menu Desktop (Direita do Header) */
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Links do Menu */
+.nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.nav-link:hover { color: white; }
+.nav-link.active { color: var(--primary); }
+
+/* Botão de Login/Ação no Header */
+.btn-header {
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex; align-items: center; gap: 8px;
+}
+
+.btn-header-primary {
+    background: var(--primary);
+    color: #0f172a;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.btn-header-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+}
+
+.btn-header-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+.btn-header-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Esconder navegação desktop no celular */
+@media (max-width: 768px) {
+    .desktop-only-links { display: none; }
+    header { padding: 0 20px; }
+}
